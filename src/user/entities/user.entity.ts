@@ -4,7 +4,7 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { IsBoolean, IsEnum, IsString, Length } from 'class-validator';
+import { IsBoolean, IsEmail, IsEnum, IsString, Length } from 'class-validator';
 import { CommonEntity } from 'src/common/entity/common.entity';
 import { Column, Entity } from 'typeorm';
 
@@ -31,6 +31,11 @@ export class User extends CommonEntity {
   @IsString()
   @Length(8)
   password: string;
+
+  @Column()
+  @Field((type) => String)
+  @IsEmail()
+  email: string;
 
   @Column({ type: 'enum', enum: UserRoles })
   @Field((type) => UserRoles)
