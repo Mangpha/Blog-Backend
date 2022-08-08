@@ -34,7 +34,9 @@ import { UserModule } from './user/user.module';
       password: process.env.DB_PSWD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/entities/*.entity.ts'],
-      synchronize: process.env.NODE_ENV === 'prod' ? false : true,
+      synchronize: process.env.NODE_ENV !== 'prod',
+      logging:
+        process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
     }),
     UserModule,
   ],
