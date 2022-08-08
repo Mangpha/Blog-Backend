@@ -2,9 +2,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -16,15 +15,30 @@ import { UserModule } from './user/user.module';
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid('dev', 'test', 'prod').required(),
         SERVER_PORT: Joi.string().required(),
+        DB_HOST: Joi.string().required(),
+        DB_PORT: Joi.string().required(),
+        DB_USER: Joi.string().required(),
+        DB_PSWD: Joi.string().required(),
+        DB_NAME: Joi.string().required(),
       }),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
     }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT,
+      username: process.env.DB_USER,
+      password: process.env.DB_PSWD,
+      database: process.env.DB_NAME,
+      entities: [__dirname + '/**/entities/*.entity.ts'],
+      synchronize: process.env.NODE_ENV === 'prod' ? false : true,
+    }),
     UserModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
