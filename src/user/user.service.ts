@@ -42,7 +42,10 @@ export class UserService {
 
   async login({ email, password }: LoginInput): Promise<LoginOutput> {
     try {
-      const findUser = await this.userRepository.findOne({ where: { email } });
+      const findUser = await this.userRepository.findOne({
+        where: { email },
+        select: ['id', 'password'],
+      });
       if (!findUser) return { success: false, error: 'User not found' };
       const checkPassword = await findUser.checkPassword(password);
       if (!checkPassword) return { success: false, error: 'Wrong Password' };
