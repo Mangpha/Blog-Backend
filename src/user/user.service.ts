@@ -4,8 +4,10 @@ import { JwtService } from 'src/jwt/jwt.service';
 import {
   CreateAccountInput,
   CreateAccountOutput,
-} from './dtos/create-account.dto';
+} from './dtos/createAccount.dto';
+import { FindByIdOutput } from './dtos/findById.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
+import { User } from './entities/user.entity';
 import { UserRepository } from './repositories/user.repository';
 
 @Injectable()
@@ -55,5 +57,9 @@ export class UserService {
       console.log(e);
       return InternalServerErrorOutput;
     }
+  }
+
+  async findById(userId: number): Promise<FindByIdOutput> {
+    return await this.userRepository.findById(userId);
   }
 }

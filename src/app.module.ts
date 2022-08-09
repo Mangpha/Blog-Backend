@@ -7,6 +7,7 @@ import * as Joi from 'joi';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
 import { JwtModule } from './jwt/jwt.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,9 @@ import { JwtModule } from './jwt/jwt.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
+      context: ({ req }) => {
+        return { token: req.headers['token'] };
+      },
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -45,6 +49,7 @@ import { JwtModule } from './jwt/jwt.module';
       privateKey: process.env.PRIVATE_KEY,
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
