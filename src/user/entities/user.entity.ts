@@ -6,7 +6,9 @@ import {
 } from '@nestjs/graphql';
 import { IsBoolean, IsEmail, IsEnum, IsString, Length } from 'class-validator';
 import { CommonEntity } from 'src/common/entity/common.entity';
-import { Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { InternalServerErrorException } from '@nestjs/common';
 
 export enum UserRoles {
   Admin = 'Admin',
@@ -20,7 +22,7 @@ registerEnumType(UserRoles, { name: 'UserRoles' });
 @InputType('UserInputType', { isAbstract: true })
 @ObjectType()
 export class User extends CommonEntity {
-  @Column()
+  @Column({ unique: true })
   @Field((type) => String)
   @IsString()
   @Length(6)
@@ -32,7 +34,7 @@ export class User extends CommonEntity {
   @Length(8)
   password: string;
 
-  @Column()
+  @Column({ unique: true })
   @Field((type) => String)
   @IsEmail()
   email: string;
@@ -46,4 +48,24 @@ export class User extends CommonEntity {
   @Field((type) => Boolean)
   @IsBoolean()
   verified: boolean;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async cryptPassword(): Promise<void> {
+    if (this.password) {
+      try {
+        this.password = await bcrypt.hash(this.password, 10);
+      } catch {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+
+  async checkPassword(userPassword: string): Promise<boolean> {
+    try {
+      return await bcrypt.compare(userPassword, this.password);
+    } catch {
+      throw new InternalServerErrorException();
+    }
+  }
 }
