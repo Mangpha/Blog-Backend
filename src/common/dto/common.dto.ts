@@ -8,6 +8,6 @@ export class CommonOutput {
   @Field((type) => String, { nullable: true })
   error?: string;
 
-  @Field((type) => Date, { defaultValue: Date.now() })
-  queryDate: Date;
+  @Field((type) => Date, { defaultValue: new Date() })
+  queryDate?: Date;
 }
