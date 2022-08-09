@@ -5,7 +5,7 @@ import { DataSource } from 'typeorm';
 
 export class TypeOrmCustomModule {
   public static forCustomRepository<T extends new (...args: any[]) => any>(
-    ...repositories: T[]
+    repositories: T[],
   ): DynamicModule {
     const providers: Provider[] = [];
 

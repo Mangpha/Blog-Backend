@@ -39,10 +39,10 @@ export class User extends CommonEntity {
   @IsEmail()
   email: string;
 
-  @Column({ type: 'enum', enum: UserRoles })
-  @Field((type) => UserRoles)
+  @Column({ type: 'enum', enum: UserRoles, default: UserRoles.Guest })
+  @Field((type) => UserRoles, { defaultValue: UserRoles.Guest })
   @IsEnum(UserRoles)
-  role: UserRoles;
+  role?: UserRoles;
 
   @Column({ default: false })
   @Field((type) => Boolean)
