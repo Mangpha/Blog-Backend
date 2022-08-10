@@ -5,6 +5,7 @@ import {
   CreateAccountInput,
   CreateAccountOutput,
 } from './dtos/createAccount.dto';
+import { DeleteAccountOutput } from './dtos/deleteAccount.dto';
 import { EditAccountInput, EditAccountOutput } from './dtos/editAccount.dto';
 import { FindByIdOutput } from './dtos/findById.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
@@ -91,6 +92,16 @@ export class UserService {
     } catch (e) {
       console.log(e);
       return { success: false, error: 'Could not edit account' };
+    }
+  }
+
+  async deleteAccount(user: User): Promise<DeleteAccountOutput> {
+    try {
+      await this.userRepository.delete({ id: user.id });
+      return { success: true };
+    } catch (e) {
+      console.log(e);
+      return { success: false, error: 'Could not delete account' };
     }
   }
 }

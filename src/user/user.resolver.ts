@@ -5,6 +5,7 @@ import {
   CreateAccountInput,
   CreateAccountOutput,
 } from './dtos/createAccount.dto';
+import { DeleteAccountOutput } from './dtos/deleteAccount.dto';
 import { EditAccountInput, EditAccountOutput } from './dtos/editAccount.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { User } from './entities/user.entity';
@@ -44,5 +45,11 @@ export class UserResolver {
     @Args('input') editAccountInput: EditAccountInput,
   ): Promise<EditAccountOutput> {
     return this.userService.editAccount(user, editAccountInput);
+  }
+
+  @Roles('Any')
+  @Mutation((returns) => DeleteAccountOutput)
+  deleteAccount(@UserData() user: User): Promise<DeleteAccountOutput> {
+    return this.userService.deleteAccount(user);
   }
 }
