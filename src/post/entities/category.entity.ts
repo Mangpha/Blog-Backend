@@ -1,13 +1,16 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { IsString } from 'class-validator';
 import { CommonEntity } from 'src/common/entity/common.entity';
-import { Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { Post } from './post.entity';
 
 @Entity()
 @InputType('CategoryInputType', { isAbstract: true })
 @ObjectType()
 export class Category extends CommonEntity {
+  @Column()
   @Field((type) => String)
+  @IsString()
   name: string;
 
   @OneToMany((type) => Post, (post) => post.category)
