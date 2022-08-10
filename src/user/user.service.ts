@@ -5,6 +5,7 @@ import {
   CreateAccountInput,
   CreateAccountOutput,
 } from './dtos/createAccount.dto';
+import { EditAccountInput, EditAccountOutput } from './dtos/editAccount.dto';
 import { FindByIdOutput } from './dtos/findById.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { User } from './entities/user.entity';
@@ -61,5 +62,35 @@ export class UserService {
 
   async findById(userId: number): Promise<FindByIdOutput> {
     return await this.userRepository.findById(userId);
+  }
+
+  async editAccount(
+    user: User,
+    { username, email, password }: EditAccountInput,
+  ): Promise<EditAccountOutput> {
+    try {
+      const userData = await this.userRepository.findOneBy({ id: user.id });
+
+      if (email) {
+        const existEmail = await this.userRepository.findOneBy({ email });
+        if (existEmail)
+          return { success: false, error: 'Email already exists' };
+        userData.email = email;
+        userData.verified = false;
+      }
+      if (username) {
+        const existUsername = await this.userRepository.findOneBy({ username });
+        if (existUsername)
+          return { success: false, error: 'Username already exists' };
+        userData.username = username;
+      }
+      if (password) user.password = password;
+
+      await this.userRepository.save(userData);
+      return { success: true };
+    } catch (e) {
+      console.log(e);
+      return { success: false, error: 'Could not edit account' };
+    }
   }
 }

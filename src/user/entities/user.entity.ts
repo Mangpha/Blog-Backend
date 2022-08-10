@@ -25,7 +25,7 @@ export class User extends CommonEntity {
   @Column({ unique: true })
   @Field((type) => String)
   @IsString()
-  @Length(6)
+  @Length(2)
   username: string;
 
   @Column({ select: false })
