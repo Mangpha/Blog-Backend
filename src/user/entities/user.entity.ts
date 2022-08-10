@@ -6,9 +6,10 @@ import {
 } from '@nestjs/graphql';
 import { IsBoolean, IsEmail, IsEnum, IsString, Length } from 'class-validator';
 import { CommonEntity } from 'src/common/entity/common.entity';
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
+import { Post } from 'src/post/entities/post.entity';
 
 export enum UserRoles {
   Admin = 'Admin',
@@ -48,6 +49,10 @@ export class User extends CommonEntity {
   @Field((type) => Boolean)
   @IsBoolean()
   verified: boolean;
+
+  @OneToMany((type) => Post, (post) => post.author)
+  @Field((type) => [Post], { nullable: true })
+  posts: Post[];
 
   @BeforeInsert()
   @BeforeUpdate()

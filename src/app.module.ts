@@ -8,6 +8,9 @@ import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
 import { JwtModule } from './jwt/jwt.module';
 import { AuthModule } from './auth/auth.module';
+import { PostModule } from './post/post.module';
+import { Post } from './post/entities/post.entity';
+import { Category } from './post/entities/category.entity';
 
 @Module({
   imports: [
@@ -40,7 +43,7 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.DB_USER,
       password: process.env.DB_PSWD,
       database: process.env.DB_NAME,
-      entities: [User],
+      entities: [User, Post, Category],
       synchronize: process.env.NODE_ENV !== 'prod',
       logging:
         process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
@@ -50,6 +53,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UserModule,
     AuthModule,
+    PostModule,
   ],
   controllers: [],
   providers: [],
