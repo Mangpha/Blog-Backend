@@ -25,15 +25,15 @@ export class UserService {
     password,
   }: CreateAccountInput): Promise<CreateAccountOutput> {
     try {
+      const existEmail = await this.userRepository.findOne({
+        where: { email },
+      });
+      if (existEmail) return { success: false, error: 'Email already exists' };
       const existUsername = await this.userRepository.findOne({
         where: { username },
       });
       if (existUsername)
         return { success: false, error: 'User name already exists' };
-      const existEmail = await this.userRepository.findOne({
-        where: { email },
-      });
-      if (existEmail) return { success: false, error: 'Email already exists' };
       await this.userRepository.save(
         this.userRepository.create({ username, email, password }),
       );
@@ -66,11 +66,11 @@ export class UserService {
   }
 
   async editAccount(
-    user: User,
+    user: number,
     { username, email, password }: EditAccountInput,
   ): Promise<EditAccountOutput> {
     try {
-      const userData = await this.userRepository.findOneBy({ id: user.id });
+      const userData = await this.userRepository.findOneBy({ id: user });
 
       if (email) {
         const existEmail = await this.userRepository.findOneBy({ email });
@@ -85,13 +85,13 @@ export class UserService {
           return { success: false, error: 'Username already exists' };
         userData.username = username;
       }
-      if (password) user.password = password;
+      if (password) userData.password = password;
 
       await this.userRepository.save(userData);
       return { success: true };
     } catch (e) {
       console.log(e);
-      return { success: false, error: 'Could not edit account' };
+      return InternalServerErrorOutput;
     }
   }
 
@@ -101,7 +101,7 @@ export class UserService {
       return { success: true };
     } catch (e) {
       console.log(e);
-      return { success: false, error: 'Could not delete account' };
+      return InternalServerErrorOutput;
     }
   }
 }
