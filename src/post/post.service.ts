@@ -3,7 +3,6 @@ import { InternalServerErrorOutput } from 'src/common/common.error';
 import { User } from 'src/user/entities/user.entity';
 import { CreatePostInput, CreatePostOutput } from './dtos/createPost.dto';
 import { FindAllPostsInput, FindAllPostsOutput } from './dtos/findAllPosts.dto';
-import { FindPostByIdInput, FindPostByIdOutput } from './dtos/findPostById.dto';
 import { CategoryRepository } from './repositories/category.repository';
 import { PostRepository } from './repositories/post.repository';
 
@@ -33,16 +32,6 @@ export class PostService {
   async findAllPosts({ page }: FindAllPostsInput): Promise<FindAllPostsOutput> {
     try {
       return await this.postRepository.findCount(page);
-    } catch {
-      return InternalServerErrorOutput;
-    }
-  }
-
-  async findPostById({ id }: FindPostByIdInput): Promise<FindPostByIdOutput> {
-    try {
-      const post = await this.postRepository.findOneBy({ id });
-      if (!post) return { success: false, error: `Post ${id} not found` };
-      return { success: true, post };
     } catch {
       return InternalServerErrorOutput;
     }
