@@ -95,9 +95,9 @@ export class UserService {
     }
   }
 
-  async deleteAccount(user: User): Promise<DeleteAccountOutput> {
+  async deleteAccount(user: number): Promise<DeleteAccountOutput> {
     try {
-      await this.userRepository.delete({ id: user.id });
+      await this.userRepository.delete({ id: user });
       return { success: true };
     } catch (e) {
       console.log(e);

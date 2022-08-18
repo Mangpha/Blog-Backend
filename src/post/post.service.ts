@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { InternalServerErrorOutput } from 'src/common/common.error';
 import { User } from 'src/user/entities/user.entity';
 import { CreatePostInput, CreatePostOutput } from './dtos/createPost.dto';
 import { CategoryRepository } from './repositories/category.repository';
@@ -24,7 +25,7 @@ export class PostService {
       return { success: true };
     } catch (e) {
       console.log(e);
-      return { success: false, error: 'Could not create post' };
+      return InternalServerErrorOutput;
     }
   }
 }

@@ -44,12 +44,12 @@ export class UserResolver {
     @UserData() user: User,
     @Args('input') editAccountInput: EditAccountInput,
   ): Promise<EditAccountOutput> {
-    return this.userService.editAccount(user, editAccountInput);
+    return this.userService.editAccount(user.id, editAccountInput);
   }
 
   @Roles('Any')
   @Mutation((returns) => DeleteAccountOutput)
   deleteAccount(@UserData() user: User): Promise<DeleteAccountOutput> {
-    return this.userService.deleteAccount(user);
+    return this.userService.deleteAccount(user.id);
   }
 }
