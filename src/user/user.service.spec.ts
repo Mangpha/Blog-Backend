@@ -146,5 +146,53 @@ describe('User Service', () => {
         error: 'Email already exists',
       });
     });
+
+    it('should fail if username exists', async () => {
+      const args = {
+        userId: 1,
+        input: { username: 'testing' },
+      };
+      userRepository.findOneBy.mockResolvedValue({ id: 1 });
+      const result = await service.editAccount(args.userId, args.input);
+      expect(result).toMatchObject({
+        success: false,
+        error: 'Username already exists',
+      });
+    });
+    it('should fail on exception', async () => {
+      const args = {
+        userId: 1,
+        input: { username: 'testing' },
+      };
+      userRepository.findOneBy.mockRejectedValue(new Error());
+      const result = await service.editAccount(args.userId, args.input);
+      expect(result).toMatchObject(InternalServerErrorOutput);
+    });
+  });
+
+  describe('Delete Account', () => {
+    const user = {
+      id: 1,
+      email: 'test@test.com',
+      username: 'test',
+      verified: true,
+      password: '1',
+      posts: [],
+      cryptPassword: () => null,
+      checkPassword: () => null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    it('should delete account', async () => {
+      userRepository.delete.mockResolvedValue({});
+      const result = await service.deleteAccount(user);
+      expect(result).toMatchObject({ success: true });
+    });
+
+    it('should fail on exception', async () => {
+      userRepository.delete.mockRejectedValue(new Error());
+      const result = await service.deleteAccount(user);
+      expect(result).toMatchObject(InternalServerErrorOutput);
+    });
   });
 });
