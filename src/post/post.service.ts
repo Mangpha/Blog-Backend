@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InternalServerErrorOutput } from 'src/common/common.error';
 import { User } from 'src/user/entities/user.entity';
 import { CreatePostInput, CreatePostOutput } from './dtos/createPost.dto';
+import { FindAllPostsInput, FindAllPostsOutput } from './dtos/findAllPosts.dto';
 import { CategoryRepository } from './repositories/category.repository';
 import { PostRepository } from './repositories/post.repository';
 
@@ -24,7 +25,14 @@ export class PostService {
       );
       return { success: true };
     } catch (e) {
-      console.log(e);
+      return InternalServerErrorOutput;
+    }
+  }
+
+  async findAllPosts({ page }: FindAllPostsInput): Promise<FindAllPostsOutput> {
+    try {
+      return await this.postRepository.findCount(page);
+    } catch {
       return InternalServerErrorOutput;
     }
   }
