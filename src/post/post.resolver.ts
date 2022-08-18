@@ -4,7 +4,6 @@ import { UserData } from 'src/auth/userData.decorator';
 import { User } from 'src/user/entities/user.entity';
 import { CreatePostInput, CreatePostOutput } from './dtos/createPost.dto';
 import { FindAllPostsInput, FindAllPostsOutput } from './dtos/findAllPosts.dto';
-import { FindPostByIdInput, FindPostByIdOutput } from './dtos/findPostById.dto';
 import { PostService } from './post.service';
 
 @Resolver()
@@ -22,15 +21,8 @@ export class PostResolver {
 
   @Query((type) => FindAllPostsOutput)
   findAllPosts(
-    @Args('input') findAllPostsInput: FindAllPostsInput,
+    @Args('input') page: FindAllPostsInput,
   ): Promise<FindAllPostsOutput> {
-    return this.postService.findAllPosts(findAllPostsInput);
-  }
-
-  @Query((type) => FindPostByIdOutput)
-  findPostById(
-    @Args('input') findPostByIdInput: FindPostByIdInput,
-  ): Promise<FindPostByIdOutput> {
-    return this.postService.findPostById(findPostByIdInput);
+    return this.postService.findAllPosts(page);
   }
 }
