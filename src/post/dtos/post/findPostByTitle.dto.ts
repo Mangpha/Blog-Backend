@@ -3,7 +3,7 @@ import {
   PaginationInput,
   PaginationOutput,
 } from 'src/common/dto/pagination.dto';
-import { Post } from '../entities/post.entity';
+import { Post } from '../../entities/post.entity';
 
 @InputType()
 export class FindPostByTitleInput extends PaginationInput {

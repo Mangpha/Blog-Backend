@@ -4,10 +4,8 @@ import {
   Int,
   ObjectType,
   PartialType,
-  PickType,
 } from '@nestjs/graphql';
 import { CommonOutput } from 'src/common/dto/common.dto';
-import { Post } from '../entities/post.entity';
 import { CreatePostInput } from './createPost.dto';
 
 @InputType()

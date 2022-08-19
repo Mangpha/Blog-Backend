@@ -2,15 +2,21 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Roles } from 'src/auth/roles.decorator';
 import { UserData } from 'src/auth/userData.decorator';
 import { User } from 'src/user/entities/user.entity';
-import { CreatePostInput, CreatePostOutput } from './dtos/createPost.dto';
-import { DeletePostInput, DeletePostOutput } from './dtos/deletePost.dto';
-import { EditPostInput, EditPostOutput } from './dtos/editPost.dto';
-import { FindAllPostsInput, FindAllPostsOutput } from './dtos/findAllPosts.dto';
-import { FindPostByIdInput, FindPostByIdOutput } from './dtos/findPostById.dto';
+import { CreatePostInput, CreatePostOutput } from './dtos/post/createPost.dto';
+import { DeletePostInput, DeletePostOutput } from './dtos/post/deletePost.dto';
+import { EditPostInput, EditPostOutput } from './dtos/post/editPost.dto';
+import {
+  FindAllPostsInput,
+  FindAllPostsOutput,
+} from './dtos/post/findAllPosts.dto';
+import {
+  FindPostByIdInput,
+  FindPostByIdOutput,
+} from './dtos/post/findPostById.dto';
 import {
   FindPostByTitleInput,
   FindPostByTitleOutput,
-} from './dtos/findPostByTitle.dto';
+} from './dtos/post/findPostByTitle.dto';
 import { PostService } from './post.service';
 
 @Resolver()

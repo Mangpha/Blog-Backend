@@ -1,7 +1,7 @@
 import { InternalServerErrorOutput } from 'src/common/common.error';
 import { CustomRepository } from 'src/typeorm/custom.decorator';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { FindAllPostsOutput } from '../dtos/findAllPosts.dto';
+import { FindAllPostsOutput } from '../dtos/post/findAllPosts.dto';
 import { Post } from '../entities/post.entity';
 
 @CustomRepository(Post)
