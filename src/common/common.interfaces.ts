@@ -1,1 +1,1 @@
-type IWhereProps<T = any> = Partial<Record<keyof T, any>>;
+type IWhereProps<Entity> = Partial<Record<keyof Entity, any>>;

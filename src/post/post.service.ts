@@ -65,12 +65,12 @@ export class PostService {
     page,
   }: FindPostByTitleInput): Promise<FindPostByTitleOutput> {
     try {
-      const { posts } = await this.postRepository.findCount(page, {
+      const findPosts = await this.postRepository.findCount(page, {
         title: Raw((search) => `${search} ILIKE '%${query}%'`),
       });
-      if (posts.length === 0)
+      if (findPosts.posts.length === 0)
         return { success: false, error: 'Posts are not found' };
-      return { success: true, posts };
+      return { success: true, ...findPosts };
     } catch (e) {
       console.log(e);
       return InternalServerErrorOutput;
