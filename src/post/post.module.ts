@@ -4,6 +4,8 @@ import { PostResolver } from './post.resolver';
 import { CategoryRepository } from './repositories/category.repository';
 import { PostRepository } from './repositories/post.repository';
 import { PostService } from './post.service';
+import { CategoryResolver } from './category.resolver';
+import { CategoryService } from './category.service';
 
 @Module({
   imports: [
@@ -12,6 +14,6 @@ import { PostService } from './post.service';
       CategoryRepository,
     ]),
   ],
-  providers: [PostResolver, PostService],
+  providers: [PostResolver, PostService, CategoryResolver, CategoryService],
 })
 export class PostModule {}
