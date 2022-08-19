@@ -8,7 +8,7 @@ import { Post } from './post.entity';
 @InputType('CategoryInputType', { isAbstract: true })
 @ObjectType()
 export class Category extends CommonEntity {
-  @Column()
+  @Column({ unique: true })
   @Field((type) => String)
   @IsString()
   name: string;
