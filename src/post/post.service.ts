@@ -41,7 +41,12 @@ export class PostService {
 
   async findPostById({ id }: FindPostByIdInput): Promise<FindPostByIdOutput> {
     try {
-      const post = await this.postRepository.findOneBy({ id });
+      const post = await this.postRepository.findOne({
+        where: {
+          id,
+        },
+        relations: ['author'],
+      });
       if (!post) return { success: false, error: `Post ${id} not found` };
       return { success: true, post };
     } catch {

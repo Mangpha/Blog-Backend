@@ -15,6 +15,7 @@ export class PostRepository extends Repository<Post> {
         skip: (page - 1) * 10,
         take: 10,
         order: { id: 'DESC' },
+        relations: ['author'],
       });
       return {
         success: true,
