@@ -3,6 +3,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { UserData } from 'src/auth/userData.decorator';
 import { User } from 'src/user/entities/user.entity';
 import { CreatePostInput, CreatePostOutput } from './dtos/createPost.dto';
+import { DeletePostInput, DeletePostOutput } from './dtos/deletePost.dto';
 import { EditPostInput, EditPostOutput } from './dtos/editPost.dto';
 import { FindAllPostsInput, FindAllPostsOutput } from './dtos/findAllPosts.dto';
 import { FindPostByIdInput, FindPostByIdOutput } from './dtos/findPostById.dto';
@@ -53,5 +54,13 @@ export class PostResolver {
     @Args('input') findPostByTitleInput: FindPostByTitleInput,
   ): Promise<FindPostByTitleOutput> {
     return this.postService.findPostByTitle(findPostByTitleInput);
+  }
+
+  @Roles('Any')
+  @Mutation((returns) => DeletePostOutput)
+  deletePost(
+    @Args('input') deletePostInput: DeletePostInput,
+  ): Promise<DeletePostOutput> {
+    return this.postService.deletePost(deletePostInput);
   }
 }

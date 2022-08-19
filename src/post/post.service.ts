@@ -3,6 +3,7 @@ import { InternalServerErrorOutput } from 'src/common/common.error';
 import { User } from 'src/user/entities/user.entity';
 import { Raw } from 'typeorm';
 import { CreatePostInput, CreatePostOutput } from './dtos/createPost.dto';
+import { DeletePostInput, DeletePostOutput } from './dtos/deletePost.dto';
 import { EditPostInput, EditPostOutput } from './dtos/editPost.dto';
 import { FindAllPostsInput, FindAllPostsOutput } from './dtos/findAllPosts.dto';
 import { FindPostByIdInput, FindPostByIdOutput } from './dtos/findPostById.dto';
@@ -98,6 +99,15 @@ export class PostService {
         id: editPostInput.postId,
         ...editPostInput,
       });
+      return { success: true };
+    } catch {
+      return InternalServerErrorOutput;
+    }
+  }
+
+  async deletePost({ id }: DeletePostInput): Promise<DeletePostOutput> {
+    try {
+      await this.postRepository.delete({ id });
       return { success: true };
     } catch {
       return InternalServerErrorOutput;
