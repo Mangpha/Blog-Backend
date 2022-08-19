@@ -62,7 +62,7 @@ export class PostResolver {
     return this.postService.findPostByTitle(findPostByTitleInput);
   }
 
-  @Roles('Any')
+  @Roles('Admin', 'User')
   @Mutation((returns) => DeletePostOutput)
   deletePost(
     @Args('input') deletePostInput: DeletePostInput,
