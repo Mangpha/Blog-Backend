@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { IsString } from 'class-validator';
+import { IsString, Length } from 'class-validator';
 import { CommonEntity } from 'src/common/entity/common.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
@@ -12,9 +12,10 @@ export class Post extends CommonEntity {
   @Column()
   @Field((type) => String)
   @IsString()
+  @Length(1)
   title: string;
 
-  @Column()
+  @Column({ type: 'text' })
   @Field((type) => String)
   @IsString()
   content: string;
