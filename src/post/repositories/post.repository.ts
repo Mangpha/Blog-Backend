@@ -1,6 +1,6 @@
 import { InternalServerErrorOutput } from 'src/common/common.error';
 import { CustomRepository } from 'src/typeorm/custom.decorator';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { FindAllPostsOutput } from '../dtos/findAllPosts.dto';
 import { Post } from '../entities/post.entity';
 
@@ -11,7 +11,7 @@ export class PostRepository extends Repository<Post> {
    */
   async findCount(
     page: number,
-    where?: IWhereProps<Post>,
+    where?: FindOptionsWhere<Post>,
   ): Promise<FindAllPostsOutput> {
     try {
       const [posts, totalResults] = await this.findAndCount({
@@ -19,9 +19,7 @@ export class PostRepository extends Repository<Post> {
         take: 10,
         order: { id: 'DESC' },
         relations: ['author'],
-        where: {
-          ...(where && { ...where }),
-        },
+        where,
       });
       return {
         success: true,
