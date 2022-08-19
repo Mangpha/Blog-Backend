@@ -9,13 +9,19 @@ export class PostRepository extends Repository<Post> {
   /**
    * The default page value is 1 and 10 values are taken. (order by ID : DESC)
    */
-  async findCount(page: number): Promise<FindAllPostsOutput> {
+  async findCount(
+    page: number,
+    where?: IWhereProps<Post>,
+  ): Promise<FindAllPostsOutput> {
     try {
       const [posts, totalResults] = await this.findAndCount({
         skip: (page - 1) * 10,
         take: 10,
         order: { id: 'DESC' },
         relations: ['author'],
+        where: {
+          ...(where && { ...where }),
+        },
       });
       return {
         success: true,

@@ -6,6 +6,10 @@ import { CreatePostInput, CreatePostOutput } from './dtos/createPost.dto';
 import { EditPostInput, EditPostOutput } from './dtos/editPost.dto';
 import { FindAllPostsInput, FindAllPostsOutput } from './dtos/findAllPosts.dto';
 import { FindPostByIdInput, FindPostByIdOutput } from './dtos/findPostById.dto';
+import {
+  FindPostByTitleInput,
+  FindPostByTitleOutput,
+} from './dtos/findPostByTitle.dto';
 import { PostService } from './post.service';
 
 @Resolver()
@@ -42,5 +46,12 @@ export class PostResolver {
     @Args('input') editPostInput: EditPostInput,
   ): Promise<EditPostOutput> {
     return this.postService.editPost(user.id, editPostInput);
+  }
+
+  @Query((returns) => FindPostByTitleOutput)
+  findPostByTitle(
+    @Args('input') findPostByTitleInput: FindPostByTitleInput,
+  ): Promise<FindPostByTitleOutput> {
+    return this.postService.findPostByTitle(findPostByTitleInput);
   }
 }

@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InternalServerErrorOutput } from 'src/common/common.error';
 import { User } from 'src/user/entities/user.entity';
+import { Raw } from 'typeorm';
 import { CreatePostInput, CreatePostOutput } from './dtos/createPost.dto';
 import { EditPostInput, EditPostOutput } from './dtos/editPost.dto';
 import { FindAllPostsInput, FindAllPostsOutput } from './dtos/findAllPosts.dto';
 import { FindPostByIdInput, FindPostByIdOutput } from './dtos/findPostById.dto';
+import {
+  FindPostByTitleInput,
+  FindPostByTitleOutput,
+} from './dtos/findPostByTitle.dto';
 import { CategoryRepository } from './repositories/category.repository';
 import { PostRepository } from './repositories/post.repository';
 
@@ -50,6 +55,23 @@ export class PostService {
       if (!post) return { success: false, error: `Post ${id} not found` };
       return { success: true, post };
     } catch {
+      return InternalServerErrorOutput;
+    }
+  }
+
+  async findPostByTitle({
+    query,
+    page,
+  }: FindPostByTitleInput): Promise<FindPostByTitleOutput> {
+    try {
+      const { posts } = await this.postRepository.findCount(page, {
+        title: Raw((search) => `${search} ILIKE '%${query}%'`),
+      });
+      if (posts.length === 0)
+        return { success: false, error: 'Posts are not found' };
+      return { success: true, posts };
+    } catch (e) {
+      console.log(e);
       return InternalServerErrorOutput;
     }
   }
