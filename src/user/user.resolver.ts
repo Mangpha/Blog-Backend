@@ -7,6 +7,7 @@ import {
 } from './dtos/createAccount.dto';
 import { DeleteAccountOutput } from './dtos/deleteAccount.dto';
 import { EditAccountInput, EditAccountOutput } from './dtos/editAccount.dto';
+import { FindByIdInput, FindByIdOutput } from './dtos/findById.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
@@ -14,11 +15,6 @@ import { UserService } from './user.service';
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
-
-  @Query((returns) => Boolean)
-  hello(): boolean {
-    return false;
-  }
 
   @Mutation((returns) => CreateAccountOutput)
   createAccount(
@@ -51,5 +47,12 @@ export class UserResolver {
   @Mutation((returns) => DeleteAccountOutput)
   deleteAccount(@UserData() user: User): Promise<DeleteAccountOutput> {
     return this.userService.deleteAccount(user.id);
+  }
+
+  @Query((returns) => FindByIdOutput)
+  findUserById(
+    @Args('input') findByIdInput: FindByIdInput,
+  ): Promise<FindByIdOutput> {
+    return this.userService.findById(findByIdInput);
   }
 }

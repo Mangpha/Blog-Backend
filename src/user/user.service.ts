@@ -7,9 +7,8 @@ import {
 } from './dtos/createAccount.dto';
 import { DeleteAccountOutput } from './dtos/deleteAccount.dto';
 import { EditAccountInput, EditAccountOutput } from './dtos/editAccount.dto';
-import { FindByIdOutput } from './dtos/findById.dto';
+import { FindByIdInput, FindByIdOutput } from './dtos/findById.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
-import { User } from './entities/user.entity';
 import { UserRepository } from './repositories/user.repository';
 
 @Injectable()
@@ -61,8 +60,8 @@ export class UserService {
     }
   }
 
-  async findById(userId: number): Promise<FindByIdOutput> {
-    return await this.userRepository.findById(userId);
+  async findById(findByIdInput: FindByIdInput): Promise<FindByIdOutput> {
+    return await this.userRepository.findById(findByIdInput);
   }
 
   async editAccount(
