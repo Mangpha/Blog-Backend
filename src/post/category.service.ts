@@ -6,6 +6,10 @@ import {
   CreateCategoryOutput,
 } from './dtos/category/createCategory.dto';
 import {
+  DeleteCategoryInput,
+  DeleteCategoryOutput,
+} from './dtos/category/deleteCategory.dto';
+import {
   EditCategoryInput,
   EditCategoryOutput,
 } from './dtos/category/editCategory.dto';
@@ -56,6 +60,20 @@ export class CategoryService {
       if (existName)
         return { success: false, error: 'Category Name already exists' };
       await this.categoryRepository.save({ ...category, name });
+      return { success: true };
+    } catch {
+      return InternalServerErrorOutput;
+    }
+  }
+
+  async deleteCategory({
+    id,
+  }: DeleteCategoryInput): Promise<DeleteCategoryOutput> {
+    try {
+      const category = await this.categoryRepository.findOne({ where: { id } });
+      if (!category)
+        return { success: false, error: `Category ${id} not found` };
+      await this.categoryRepository.delete({ id });
       return { success: true };
     } catch {
       return InternalServerErrorOutput;

@@ -6,6 +6,10 @@ import {
   CreateCategoryOutput,
 } from './dtos/category/createCategory.dto';
 import {
+  DeleteCategoryInput,
+  DeleteCategoryOutput,
+} from './dtos/category/deleteCategory.dto';
+import {
   EditCategoryInput,
   EditCategoryOutput,
 } from './dtos/category/editCategory.dto';
@@ -35,5 +39,13 @@ export class CategoryResolver {
     @Args('input') editCategoryInput: EditCategoryInput,
   ): Promise<EditCategoryOutput> {
     return this.categoryService.editCategory(editCategoryInput);
+  }
+
+  @Roles('Admin')
+  @Mutation((returns) => DeleteCategoryOutput)
+  deleteCategory(
+    @Args('input') deleteCategoryInput: DeleteCategoryInput,
+  ): Promise<DeleteCategoryOutput> {
+    return this.categoryService.deleteCategory(deleteCategoryInput);
   }
 }
