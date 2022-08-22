@@ -171,18 +171,7 @@ describe('User Service', () => {
   });
 
   describe('Delete Account', () => {
-    const user = {
-      id: 1,
-      email: 'test@test.com',
-      username: 'test',
-      verified: true,
-      password: '1',
-      posts: [],
-      cryptPassword: () => null,
-      checkPassword: () => null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    const user = 1;
     it('should delete account', async () => {
       userRepository.delete.mockResolvedValue({});
       const result = await service.deleteAccount(user);
