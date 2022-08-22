@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InternalServerErrorOutput } from 'src/common/common.error';
-import { ILike } from 'typeorm';
 import {
   CreateCategoryInput,
   CreateCategoryOutput,

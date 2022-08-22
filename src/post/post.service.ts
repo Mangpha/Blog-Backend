@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InternalServerErrorOutput } from 'src/common/common.error';
 import { User } from 'src/user/entities/user.entity';
+import { UserRepository } from 'src/user/repositories/user.repository';
 import { Raw } from 'typeorm';
 import { CreatePostInput, CreatePostOutput } from './dtos/post/createPost.dto';
 import { DeletePostInput, DeletePostOutput } from './dtos/post/deletePost.dto';
@@ -25,18 +26,22 @@ import { PostRepository } from './repositories/post.repository';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly postRepository: PostRepository) {}
+  constructor(
+    private readonly postRepository: PostRepository,
+    private readonly userRepository: UserRepository,
+  ) {}
 
   async createPost(
-    author: User,
-    { title, content, category }: CreatePostInput,
+    authorId: number,
+    createPostInput: CreatePostInput,
   ): Promise<CreatePostOutput> {
     try {
+      const author = await this.userRepository.findOne({
+        where: { id: authorId },
+      });
       await this.postRepository.save(
         this.postRepository.create({
-          title,
-          content,
-          category,
+          ...createPostInput,
           author,
         }),
       );
@@ -112,8 +117,14 @@ export class PostService {
     }
   }
 
-  async deletePost({ id }: DeletePostInput): Promise<DeletePostOutput> {
+  async deletePost(
+    authorId: number,
+    { id }: DeletePostInput,
+  ): Promise<DeletePostOutput> {
     try {
+      const matchAuthor = await this.postRepository.findOne({ where: { id } });
+      if (matchAuthor.authorId !== authorId)
+        return { success: false, error: 'Permission Denied' };
       await this.postRepository.delete({ id });
       return { success: true };
     } catch {

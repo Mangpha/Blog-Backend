@@ -33,7 +33,7 @@ export class PostResolver {
     @UserData() author: User,
     @Args('input') createPostInput: CreatePostInput,
   ): Promise<CreatePostOutput> {
-    return this.postService.createPost(author, createPostInput);
+    return this.postService.createPost(author.id, createPostInput);
   }
 
   @Query((returns) => FindAllPostsOutput)
@@ -69,9 +69,10 @@ export class PostResolver {
   @Roles('Admin', 'User')
   @Mutation((returns) => DeletePostOutput)
   deletePost(
+    @UserData() author: User,
     @Args('input') deletePostInput: DeletePostInput,
   ): Promise<DeletePostOutput> {
-    return this.postService.deletePost(deletePostInput);
+    return this.postService.deletePost(author.id, deletePostInput);
   }
 
   @Query((returns) => FindPostByCategoryOutput)

@@ -6,12 +6,14 @@ import { PostRepository } from './repositories/post.repository';
 import { PostService } from './post.service';
 import { CategoryResolver } from './category.resolver';
 import { CategoryService } from './category.service';
+import { UserRepository } from 'src/user/repositories/user.repository';
 
 @Module({
   imports: [
     TypeOrmCustomModule.forCustomRepository([
       PostRepository,
       CategoryRepository,
+      UserRepository,
     ]),
   ],
   providers: [PostResolver, PostService, CategoryResolver, CategoryService],
