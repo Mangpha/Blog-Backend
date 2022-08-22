@@ -1,6 +1,14 @@
 import { CustomRepository } from 'src/typeorm/custom.decorator';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Category } from '../entities/category.entity';
 
 @CustomRepository(Category)
-export class CategoryRepository extends Repository<Category> {}
+export class CategoryRepository extends Repository<Category> {
+  async existName(name: string): Promise<Category> {
+    return await this.findOne({
+      where: {
+        name,
+      },
+    });
+  }
+}

@@ -5,6 +5,10 @@ import {
   CreateCategoryInput,
   CreateCategoryOutput,
 } from './dtos/category/createCategory.dto';
+import {
+  EditCategoryInput,
+  EditCategoryOutput,
+} from './dtos/category/editCategory.dto';
 import { FindAllCategoriesOutput } from './dtos/category/findAllCategories.dto';
 import { Category } from './entities/category.entity';
 
@@ -12,7 +16,7 @@ import { Category } from './entities/category.entity';
 export class CategoryResolver {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Roles('Admin')
+  @Roles('Admin', 'User')
   @Mutation((returns) => CreateCategoryOutput)
   createCategory(
     @Args('input') createCategoryInput: CreateCategoryInput,
@@ -23,5 +27,13 @@ export class CategoryResolver {
   @Query((returns) => FindAllCategoriesOutput)
   findAllCategories(): Promise<FindAllCategoriesOutput> {
     return this.categoryService.findAllCategories();
+  }
+
+  @Roles('Admin')
+  @Mutation((returns) => EditCategoryOutput)
+  editCategory(
+    @Args('input') editCategoryInput: EditCategoryInput,
+  ): Promise<EditCategoryOutput> {
+    return this.categoryService.editCategory(editCategoryInput);
   }
 }
