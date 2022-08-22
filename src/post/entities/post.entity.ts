@@ -2,7 +2,7 @@ import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsString, Length } from 'class-validator';
 import { CommonEntity } from 'src/common/entity/common.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, RelationId } from 'typeorm';
 import { Category } from './category.entity';
 
 @Entity()
@@ -22,7 +22,7 @@ export class Post extends CommonEntity {
 
   @ManyToOne((type) => User, (user) => user.posts, { onDelete: 'SET NULL' })
   @Field((type) => User, { nullable: true })
-  author: User;
+  author?: User;
 
   @RelationId((post: Post) => post.author)
   authorId: number;
@@ -31,5 +31,8 @@ export class Post extends CommonEntity {
     onDelete: 'SET NULL',
   })
   @Field((type) => Category, { nullable: true })
-  category: Category;
+  category?: Category;
+
+  @RelationId((post: Post) => post.category)
+  categoryId: number;
 }

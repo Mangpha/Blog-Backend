@@ -18,9 +18,11 @@ export class PostRepository extends Repository<Post> {
         skip: (page - 1) * 10,
         take: 10,
         order: { id: 'DESC' },
-        relations: ['author'],
+        relations: ['author', 'category'],
         where,
       });
+      if (posts.length === 0)
+        return { success: false, error: 'Posts not found' };
       return {
         success: true,
         posts,

@@ -10,6 +10,10 @@ import {
   FindAllPostsOutput,
 } from './dtos/post/findAllPosts.dto';
 import {
+  FindPostByCategoryInput,
+  FindPostByCategoryOutput,
+} from './dtos/post/findPostByCategory.dto';
+import {
   FindPostByIdInput,
   FindPostByIdOutput,
 } from './dtos/post/findPostById.dto';
@@ -73,9 +77,7 @@ export class PostService {
       const findPosts = await this.postRepository.findCount(page, {
         title: Raw((search) => `${search} ILIKE '%${query}%'`),
       });
-      if (findPosts.posts.length === 0)
-        return { success: false, error: 'Posts are not found' };
-      return { success: true, ...findPosts };
+      return findPosts;
     } catch (e) {
       console.log(e);
       return InternalServerErrorOutput;
@@ -114,6 +116,22 @@ export class PostService {
     try {
       await this.postRepository.delete({ id });
       return { success: true };
+    } catch {
+      return InternalServerErrorOutput;
+    }
+  }
+
+  async findPostByCategory({
+    page,
+    categoryId,
+  }: FindPostByCategoryInput): Promise<FindPostByCategoryOutput> {
+    try {
+      const results = await this.postRepository.findCount(page, {
+        category: {
+          id: categoryId,
+        },
+      });
+      return results;
     } catch {
       return InternalServerErrorOutput;
     }

@@ -10,6 +10,10 @@ import {
   FindAllPostsOutput,
 } from './dtos/post/findAllPosts.dto';
 import {
+  FindPostByCategoryInput,
+  FindPostByCategoryOutput,
+} from './dtos/post/findPostByCategory.dto';
+import {
   FindPostByIdInput,
   FindPostByIdOutput,
 } from './dtos/post/findPostById.dto';
@@ -68,5 +72,12 @@ export class PostResolver {
     @Args('input') deletePostInput: DeletePostInput,
   ): Promise<DeletePostOutput> {
     return this.postService.deletePost(deletePostInput);
+  }
+
+  @Query((returns) => FindPostByCategoryOutput)
+  findPostByCategory(
+    @Args('input') findPostByCategoryInput: FindPostByCategoryInput,
+  ): Promise<FindPostByCategoryOutput> {
+    return this.postService.findPostByCategory(findPostByCategoryInput);
   }
 }
