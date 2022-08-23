@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InternalServerErrorOutput } from 'src/common/common.error';
 import { User } from 'src/user/entities/user.entity';
 import { UserRepository } from 'src/user/repositories/user.repository';
-import { Raw } from 'typeorm';
+import { ILike, Raw } from 'typeorm';
 import { CreatePostInput, CreatePostOutput } from './dtos/post/createPost.dto';
 import { DeletePostInput, DeletePostOutput } from './dtos/post/deletePost.dto';
 import { EditPostInput, EditPostOutput } from './dtos/post/editPost.dto';
@@ -80,7 +80,7 @@ export class PostService {
   }: FindPostByTitleInput): Promise<FindPostByTitleOutput> {
     try {
       const findPosts = await this.postRepository.findCount(page, {
-        title: Raw((search) => `${search} ILIKE '%${query}%'`),
+        title: ILike(query),
       });
       return findPosts;
     } catch (e) {
