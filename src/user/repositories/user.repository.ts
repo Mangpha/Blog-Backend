@@ -6,6 +6,9 @@ import { User } from '../entities/user.entity';
 
 @CustomRepository(User)
 export class UserRepository extends Repository<User> {
+  /**
+   * Return User Data with Post Relation
+   */
   async findById({ id }: FindByIdInput): Promise<FindByIdOutput> {
     try {
       const user = await this.findOne({

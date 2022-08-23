@@ -61,7 +61,11 @@ export class UserService {
   }
 
   async findById(findByIdInput: FindByIdInput): Promise<FindByIdOutput> {
-    return await this.userRepository.findById(findByIdInput);
+    try {
+      return await this.userRepository.findById(findByIdInput);
+    } catch {
+      return InternalServerErrorOutput;
+    }
   }
 
   async editAccount(

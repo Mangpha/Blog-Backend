@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { JwtService } from 'src/jwt/jwt.service';
@@ -133,6 +134,28 @@ describe('User Service', () => {
     });
   });
 
+  describe('Find By Id', () => {
+    it('should return value', async () => {
+      // @ts-ignore
+      userRepository.findById.mockResolvedValue(null);
+      const result = await service.findById({ id: 1 });
+      // @ts-ignore
+      expect(userRepository.findById).toBeDefined();
+      // @ts-ignore
+      expect(userRepository.findById).toHaveBeenCalledTimes(1);
+      // @ts-ignore
+      expect(userRepository.findById).toHaveBeenCalledWith({ id: 1 });
+      expect(result).toBeNull();
+    });
+
+    it('should fail on exception', async () => {
+      // @ts-ignore
+      userRepository.findById.mockRejectedValue(new Error());
+      const result = await service.findById({ id: 1 });
+      expect(result).toMatchObject(InternalServerErrorOutput);
+    });
+  });
+
   describe('Edit Account', () => {
     it('should fail if email exists', async () => {
       const args = {
@@ -159,6 +182,26 @@ describe('User Service', () => {
         error: 'Username already exists',
       });
     });
+
+    it('should modify profile', async () => {
+      const args = {
+        userId: 1,
+        input: { password: 'test' },
+      };
+      userRepository.findOneBy.mockResolvedValue({
+        id: 1,
+        password: 'old password',
+      });
+      userRepository.save.mockResolvedValue({ ...args.input, id: 1 });
+      const result = await service.editAccount(args.userId, args.input);
+      expect(userRepository.save).toHaveBeenCalledTimes(1);
+      expect(userRepository.save).toHaveBeenCalledWith({
+        ...args.input,
+        id: 1,
+      });
+      expect(result).toMatchObject({ success: true });
+    });
+
     it('should fail on exception', async () => {
       const args = {
         userId: 1,
