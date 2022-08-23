@@ -8,6 +8,7 @@ import { Post } from '../entities/post.entity';
 export class PostRepository extends Repository<Post> {
   /**
    * The default page value is 1 and 10 values are taken. (order by ID : DESC)
+   * Example: findCount(page: 1, { column: FindOptions })
    */
   async findCount(
     page: number,
