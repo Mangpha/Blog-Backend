@@ -19,17 +19,15 @@ import { CategoryRepository } from './repositories/category.repository';
 export class CategoryService {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
-  async createCategory(
-    createCategoryInput: CreateCategoryInput,
-  ): Promise<CreateCategoryOutput> {
+  async createCategory({
+    name,
+  }: CreateCategoryInput): Promise<CreateCategoryOutput> {
     try {
-      const existName = await this.categoryRepository.existName(
-        createCategoryInput.name,
-      );
+      const existName = await this.categoryRepository.existName(name);
       if (existName)
         return { success: false, error: 'Category name already exists' };
       await this.categoryRepository.save(
-        this.categoryRepository.create(createCategoryInput),
+        this.categoryRepository.create({ name }),
       );
       return { success: true };
     } catch {
