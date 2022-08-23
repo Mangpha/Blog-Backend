@@ -90,7 +90,7 @@ export class PostService {
   }
 
   async editPost(
-    userId: number,
+    authorId: number,
     editPostInput: EditPostInput,
   ): Promise<EditPostOutput> {
     try {
@@ -100,13 +100,13 @@ export class PostService {
         },
         loadRelationIds: true,
       });
-      if (post.authorId !== userId)
-        return { success: false, error: 'Permission Denied' };
       if (!post)
         return {
           success: false,
           error: `Post ${editPostInput.postId} Not found`,
         };
+      if (post.authorId !== authorId)
+        return { success: false, error: 'Permission Denied' };
       await this.postRepository.save({
         id: editPostInput.postId,
         ...editPostInput,
@@ -122,8 +122,8 @@ export class PostService {
     { id }: DeletePostInput,
   ): Promise<DeletePostOutput> {
     try {
-      const matchAuthor = await this.postRepository.findOne({ where: { id } });
-      if (matchAuthor.authorId !== authorId)
+      const post = await this.postRepository.findOne({ where: { id } });
+      if (post.authorId !== authorId)
         return { success: false, error: 'Permission Denied' };
       await this.postRepository.delete({ id });
       return { success: true };
