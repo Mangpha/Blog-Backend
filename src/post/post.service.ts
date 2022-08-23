@@ -80,7 +80,7 @@ export class PostService {
   }: FindPostByTitleInput): Promise<FindPostByTitleOutput> {
     try {
       const findPosts = await this.postRepository.findCount(page, {
-        title: ILike(query),
+        title: ILike(`%${query}%`),
       });
       return findPosts;
     } catch (e) {
