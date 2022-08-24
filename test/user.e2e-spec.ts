@@ -355,6 +355,45 @@ describe('User Module (e2e)', () => {
     });
   });
 
+  describe('Change Role', () => {
+    it('should change role', () => {
+      return privateTest(`
+        mutation {
+          changeRole(input: {
+            role: User
+          }) {
+            success
+            error
+          }
+        }
+      `)
+        .expect(200)
+        .expect((res) => {
+          const { success, error } = res.body.data.changeRole;
+          expect(success).toBeTruthy();
+          expect(error).toBeNull();
+        });
+    });
+
+    it('should fail if user not logged in', () => {
+      return publicTest(`
+        mutation {
+          changeRole(input: {
+            role: User
+          }) {
+            success
+            error
+          }
+        }
+      `)
+        .expect(200)
+        .expect((res) => {
+          const [{ message }] = res.body.errors;
+          expect(message).toEqual(expect.any(String));
+        });
+    });
+  });
+
   describe('Delete Account', () => {
     it('should delete account', () => {
       return privateTest(`
