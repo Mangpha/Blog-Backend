@@ -227,4 +227,38 @@ describe('User Service', () => {
       expect(result).toMatchObject(InternalServerErrorOutput);
     });
   });
+
+  describe('Change Role', () => {
+    const userId = 1;
+    const payload = {
+      role: UserRoles.User,
+    };
+    it('should change role', async () => {
+      userRepository.findOne.mockResolvedValue({
+        id: 1,
+        role: UserRoles.Guest,
+      });
+      userRepository.save.mockResolvedValue({
+        id: 1,
+        role: UserRoles.User,
+      });
+      const result = await service.changeRole(userId, payload);
+      expect(userRepository.findOne).toHaveBeenCalledTimes(1);
+      expect(userRepository.findOne).toHaveBeenCalledWith({
+        where: { id: userId },
+      });
+      expect(userRepository.save).toHaveBeenCalledTimes(1);
+      expect(userRepository.save).toHaveBeenCalledWith({
+        id: userId,
+        ...payload,
+      });
+      expect(result).toMatchObject({ success: true });
+    });
+
+    it('should fail on exception', async () => {
+      userRepository.findOne.mockRejectedValue(new Error());
+      const result = await service.changeRole(userId, payload);
+      expect(result).toMatchObject(InternalServerErrorOutput);
+    });
+  });
 });
