@@ -1,6 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Roles } from 'src/auth/roles.decorator';
 import { UserData } from 'src/auth/userData.decorator';
+import { ChangeRoleInput, ChangeRoleOutput } from './dtos/changeRole.dto';
 import {
   CreateAccountInput,
   CreateAccountOutput,
@@ -54,5 +55,14 @@ export class UserResolver {
     @Args('input') findByIdInput: FindByIdInput,
   ): Promise<FindByIdOutput> {
     return this.userService.findById(findByIdInput);
+  }
+
+  @Roles('Any')
+  @Mutation((returns) => ChangeRoleOutput)
+  changeRole(
+    @UserData() user: User,
+    @Args('input') changeRoleInput: ChangeRoleInput,
+  ): Promise<ChangeRoleOutput> {
+    return this.userService.changeRole(user.id, changeRoleInput);
   }
 }

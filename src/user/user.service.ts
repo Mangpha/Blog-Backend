@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InternalServerErrorOutput } from 'src/common/common.error';
 import { JwtService } from 'src/jwt/jwt.service';
+import { ChangeRoleInput, ChangeRoleOutput } from './dtos/changeRole.dto';
 import {
   CreateAccountInput,
   CreateAccountOutput,
@@ -104,6 +105,20 @@ export class UserService {
       return { success: true };
     } catch (e) {
       console.log(e);
+      return InternalServerErrorOutput;
+    }
+  }
+
+  async changeRole(
+    userId: number,
+    { role }: ChangeRoleInput,
+  ): Promise<ChangeRoleOutput> {
+    try {
+      const user = await this.userRepository.findOne({ where: { id: userId } });
+      if (role) user.role = role;
+      await this.userRepository.save(user);
+      return { success: true };
+    } catch {
       return InternalServerErrorOutput;
     }
   }
