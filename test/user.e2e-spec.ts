@@ -1,10 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { AppModule } from 'src/app.module';
 import * as request from 'supertest';
-import { UserRepository } from 'src/user/repositories/user.repository';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource } from 'typeorm';
 
 const END_POINT = '/graphql';
 const TEST_USER = {
@@ -15,7 +13,6 @@ const TEST_USER = {
 
 describe('User Module (e2e)', () => {
   let app: INestApplication;
-  let userRepository: Repository<UserRepository>;
   let jwtToken: string;
 
   const baseTest = () => request(app.getHttpServer()).post(END_POINT);
@@ -29,9 +26,6 @@ describe('User Module (e2e)', () => {
     }).compile();
 
     app = module.createNestApplication();
-    userRepository = module.get<Repository<UserRepository>>(
-      getRepositoryToken(UserRepository),
-    );
     await app.init();
   });
 
