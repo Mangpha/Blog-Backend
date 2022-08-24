@@ -14,6 +14,13 @@ const TEST_USER = {
 describe('User Module (e2e)', () => {
   let app: INestApplication;
   let jwtToken: string;
+  const connection: DataSource = new DataSource({
+    type: 'postgres',
+    host: process.env.DB_HOST,
+    username: process.env.DB_USER,
+    password: process.env.DB_PSWD,
+    database: process.env.DB_NAME,
+  });
 
   const baseTest = () => request(app.getHttpServer()).post(END_POINT);
   const publicTest = (query: string) => baseTest().send({ query });
@@ -27,19 +34,13 @@ describe('User Module (e2e)', () => {
 
     app = module.createNestApplication();
     await app.init();
+    await connection.initialize();
   });
 
   afterAll(async () => {
-    const connection = await new DataSource({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      username: process.env.DB_USER,
-      password: process.env.DB_PSWD,
-      database: process.env.DB_NAME,
-    }).initialize();
     await connection.dropDatabase();
     await connection.destroy();
-    app.close();
+    await app.close();
   });
 
   describe('Create Account', () => {
