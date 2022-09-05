@@ -24,7 +24,7 @@ export class UserResolver {
     return this.userService.createAccount(createAccountInput);
   }
 
-  @Query((returns) => LoginOutput)
+  @Mutation((returns) => LoginOutput)
   login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
     return this.userService.login(loginInput);
   }
