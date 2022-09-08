@@ -22,6 +22,7 @@ import {
   FindPostByTitleInput,
   FindPostByTitleOutput,
 } from './dtos/post/findPostByTitle.dto';
+import { CategoryRepository } from './repositories/category.repository';
 import { PostRepository } from './repositories/post.repository';
 
 @Injectable()
@@ -29,20 +30,26 @@ export class PostService {
   constructor(
     private readonly postRepository: PostRepository,
     private readonly userRepository: UserRepository,
+    private readonly categoryRepository: CategoryRepository,
   ) {}
 
   async createPost(
     authorId: number,
-    createPostInput: CreatePostInput,
+    { title, content, category }: CreatePostInput,
   ): Promise<CreatePostOutput> {
     try {
       const author = await this.userRepository.findOne({
         where: { id: authorId },
       });
+      const findCategory = await this.categoryRepository.findOne({
+        where: { name: category.name },
+      });
       const post = await this.postRepository.save(
         this.postRepository.create({
-          ...createPostInput,
+          title,
+          content,
           author,
+          ...(category && { category: findCategory }),
         }),
       );
       return { success: true, postId: post.id };
