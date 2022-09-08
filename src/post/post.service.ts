@@ -65,7 +65,7 @@ export class PostService {
         where: {
           id,
         },
-        relations: ['author'],
+        relations: ['author', 'category'],
       });
       if (!post) return { success: false, error: `Post ${id} not found` };
       return { success: true, post };
