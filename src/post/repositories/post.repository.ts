@@ -16,8 +16,8 @@ export class PostRepository extends Repository<Post> {
   ): Promise<FindAllPostsOutput> {
     try {
       const [posts, totalResults] = await this.findAndCount({
-        skip: (page - 1) * 10,
-        take: 10,
+        skip: (page - 1) * 5,
+        take: 5,
         order: { id: 'DESC' },
         relations: ['author', 'category'],
         where,
@@ -27,7 +27,7 @@ export class PostRepository extends Repository<Post> {
       return {
         success: true,
         posts,
-        totalPages: Math.ceil(totalResults / 10),
+        totalPages: Math.ceil(totalResults / 5),
         totalResults,
       };
     } catch {
