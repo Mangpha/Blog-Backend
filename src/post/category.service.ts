@@ -26,10 +26,10 @@ export class CategoryService {
       const existName = await this.categoryRepository.existName(name);
       if (existName)
         return { success: false, error: 'Category name already exists' };
-      await this.categoryRepository.save(
+      const category = await this.categoryRepository.save(
         this.categoryRepository.create({ name }),
       );
-      return { success: true };
+      return { success: true, categoryId: category.id };
     } catch {
       return InternalServerErrorOutput;
     }

@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType, PickType } from '@nestjs/graphql';
+import { Field, InputType, Int, ObjectType, PickType } from '@nestjs/graphql';
 import { CommonOutput } from 'src/common/dto/common.dto';
 import { Category } from '../../entities/category.entity';
 import { Post } from '../../entities/post.entity';
@@ -10,4 +10,7 @@ export class CreatePostInput extends PickType(Post, ['title', 'content']) {
 }
 
 @ObjectType()
-export class CreatePostOutput extends CommonOutput {}
+export class CreatePostOutput extends CommonOutput {
+  @Field((type) => Int, { nullable: true })
+  postId?: number;
+}

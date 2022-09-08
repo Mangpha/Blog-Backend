@@ -39,13 +39,13 @@ export class PostService {
       const author = await this.userRepository.findOne({
         where: { id: authorId },
       });
-      await this.postRepository.save(
+      const post = await this.postRepository.save(
         this.postRepository.create({
           ...createPostInput,
           author,
         }),
       );
-      return { success: true };
+      return { success: true, postId: post.id };
     } catch (e) {
       return InternalServerErrorOutput;
     }
