@@ -22,6 +22,7 @@ import {
   FindPostByTitleInput,
   FindPostByTitleOutput,
 } from './dtos/post/findPostByTitle.dto';
+import { Category } from './entities/category.entity';
 import { CategoryRepository } from './repositories/category.repository';
 import { PostRepository } from './repositories/post.repository';
 
@@ -38,18 +39,21 @@ export class PostService {
     { title, content, category }: CreatePostInput,
   ): Promise<CreatePostOutput> {
     try {
+      let categoryName: Category;
       const author = await this.userRepository.findOne({
         where: { id: authorId },
       });
-      const findCategory = await this.categoryRepository.findOne({
-        where: { name: category.name },
-      });
+      if (category) {
+        categoryName = await this.categoryRepository.findOne({
+          where: { name: category.name },
+        });
+      }
       const post = await this.postRepository.save(
         this.postRepository.create({
           title,
           content,
           author,
-          ...(category && { category: findCategory }),
+          ...(category && { category: categoryName }),
         }),
       );
       return { success: true, postId: post.id };
