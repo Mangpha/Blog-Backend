@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
 import { Post } from './post/entities/post.entity';
 import { Category } from './post/entities/category.entity';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -27,6 +28,9 @@ import { Category } from './post/entities/category.entity';
         DB_PSWD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
         PRIVATE_KEY: Joi.string().required(),
+        AWS_ACCESS_KEY: Joi.string().required(),
+        AWS_SECRET_KEY: Joi.string().required(),
+        BUCKET: Joi.string().required(),
       }),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -54,6 +58,7 @@ import { Category } from './post/entities/category.entity';
     UserModule,
     AuthModule,
     PostModule,
+    UploadsModule,
   ],
   controllers: [],
   providers: [],
