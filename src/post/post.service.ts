@@ -62,9 +62,12 @@ export class PostService {
     }
   }
 
-  async findAllPosts({ page }: FindAllPostsInput): Promise<FindAllPostsOutput> {
+  async findAllPosts({
+    page,
+    take,
+  }: FindAllPostsInput): Promise<FindAllPostsOutput> {
     try {
-      return await this.postRepository.findCount(page);
+      return await this.postRepository.findCount(page, {}, take);
     } catch {
       return InternalServerErrorOutput;
     }
