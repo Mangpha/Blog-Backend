@@ -53,7 +53,7 @@ export class PostService {
           title,
           content,
           author,
-          ...(category && { category: categoryName }),
+          ...(categoryName && { category: categoryName }),
         }),
       );
       return { success: true, postId: post.id };
@@ -108,6 +108,7 @@ export class PostService {
     editPostInput: EditPostInput,
   ): Promise<EditPostOutput> {
     try {
+      let categoryName: Category;
       const post = await this.postRepository.findOne({
         where: {
           id: editPostInput.postId,
@@ -121,9 +122,15 @@ export class PostService {
         };
       if (post.authorId !== authorId)
         return { success: false, error: 'Permission Denied' };
+      if (editPostInput.category) {
+        categoryName = await this.categoryRepository.findOne({
+          where: { name: editPostInput.category.name },
+        });
+      }
       await this.postRepository.save({
         id: editPostInput.postId,
         ...editPostInput,
+        ...(categoryName && { category: categoryName }),
       });
       return { success: true };
     } catch {
