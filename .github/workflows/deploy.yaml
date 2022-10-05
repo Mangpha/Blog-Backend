@@ -39,6 +39,7 @@ jobs:
     steps:
       - name: Create env file
         uses: actions/checkout@v2
+        run: |
           jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
