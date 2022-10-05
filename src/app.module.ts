@@ -18,9 +18,9 @@ import { UploadsModule } from './uploads/uploads.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'dev' ? '.dev.env' : '.test.env',
-      ignoreEnvFile: process.env.NODE_ENV === 'prod',
+      ignoreEnvFile: process.env.NODE_ENV === 'production',
       validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid('dev', 'test', 'prod').required(),
+        NODE_ENV: Joi.string().valid('dev', 'test', 'production').required(),
         SERVER_PORT: Joi.string().required(),
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.string().required(),
@@ -48,9 +48,10 @@ import { UploadsModule } from './uploads/uploads.module';
       password: process.env.DB_PSWD,
       database: process.env.DB_NAME,
       entities: [User, Post, Category],
-      synchronize: process.env.NODE_ENV !== 'prod',
+      synchronize: process.env.NODE_ENV !== 'production',
       logging:
-        process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
+        process.env.NODE_ENV !== 'production' &&
+        process.env.NODE_ENV !== 'test',
     }),
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
