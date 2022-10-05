@@ -42,6 +42,14 @@ jobs:
           touch .env
           echo SERVER_PORT=8081 >> .env
           echo NODE_ENV=${{ secrets.NODE_ENV }} >> .env
+          echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+          echo DB_USER=${{ secrets.DB_USER }} >> .env
+          echo DB_PSWD=${{ secrets.DB_PSWD }} >> .env
+          echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+          echo PRIVATE_KEY=${{ secrets.PRIVATE_KEY }} >> .env
+          echo AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} >> .env
+          echo AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }} >> .env
+          echo BUCKET=${{ secrets.BUCKET }} >> .env
           cat .env
 
       - name: Install Node.js ${{ matrix.node-version }}
@@ -77,8 +85,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.DEPLOY_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.DEPLOY_SECRET_KEY }}
-          application_name: test-server
-          environment_name: Testserver-env
+          application_name: ${{ secrets.DEPLOY_APP_NAME }}
+          environment_name: ${{ secrets.DEPLOY_ENV_NAME }}
           region: ${{ secrets.AWS_REGION }}
-          version_label: ${{github.SHA}}
+          version_label: ${{ github.SHA }}
           deployment_package: deploy.zip
