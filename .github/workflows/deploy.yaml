@@ -20,10 +20,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run build
         run: npm run build
@@ -38,6 +37,8 @@ jobs:
 
     needs: buildAndTest
     steps:
+      - uses: actions/checkout@v2
+
       - name: Create env file
         run: |
           jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env
@@ -51,7 +52,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run build
         run: npm run build
