@@ -17,8 +17,12 @@ import { UploadsModule } from './uploads/uploads.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV === 'dev' ? '.dev.env' : '.test.env',
-      ignoreEnvFile: process.env.NODE_ENV === 'production',
+      envFilePath:
+        process.env.NODE_ENV === 'dev'
+          ? '.dev.env'
+          : process.env.NODE_ENV === 'test'
+          ? '.test.env'
+          : '.env',
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid('dev', 'test', 'production').required(),
         SERVER_PORT: Joi.string().required(),
@@ -48,7 +52,7 @@ import { UploadsModule } from './uploads/uploads.module';
       password: process.env.DB_PSWD,
       database: process.env.DB_NAME,
       entities: [User, Post, Category],
-      synchronize: process.env.NODE_ENV !== 'production',
+      synchronize: true,
       logging:
         process.env.NODE_ENV !== 'production' &&
         process.env.NODE_ENV !== 'test',
