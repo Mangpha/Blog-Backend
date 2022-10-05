@@ -3,7 +3,7 @@ name: Deploy to EB
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   buildAndTest:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        node-version: ['16.15.0']
+        node-version: ['16.x']
 
     steps:
       - uses: actions/checkout@v2
@@ -32,7 +32,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ['16.15.0']
+        node-version: ['16.x']
 
     needs: buildAndTest
     steps:
