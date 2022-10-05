@@ -8,12 +8,12 @@ import { Post } from './post.entity';
 @InputType('CategoryInputType', { isAbstract: true })
 @ObjectType()
 export class Category extends CommonEntity {
-  @Column()
+  @Column({ unique: true })
   @Field((type) => String)
   @IsString()
   name: string;
 
-  @OneToMany((type) => Post, (post) => post.category)
+  @OneToMany((type) => Post, (post) => post.category, { eager: true })
   @Field((type) => [Post], { nullable: true })
   posts: Post[];
 }

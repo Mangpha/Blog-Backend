@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InternalServerErrorOutput } from 'src/common/common.error';
 import { JwtService } from 'src/jwt/jwt.service';
+import { ChangeRoleInput, ChangeRoleOutput } from './dtos/changeRole.dto';
 import {
   CreateAccountInput,
   CreateAccountOutput,
 } from './dtos/createAccount.dto';
 import { DeleteAccountOutput } from './dtos/deleteAccount.dto';
 import { EditAccountInput, EditAccountOutput } from './dtos/editAccount.dto';
-import { FindByIdOutput } from './dtos/findById.dto';
+import { FindByIdInput, FindByIdOutput } from './dtos/findById.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
-import { User } from './entities/user.entity';
 import { UserRepository } from './repositories/user.repository';
 
 @Injectable()
@@ -25,15 +25,15 @@ export class UserService {
     password,
   }: CreateAccountInput): Promise<CreateAccountOutput> {
     try {
+      const existEmail = await this.userRepository.findOne({
+        where: { email },
+      });
+      if (existEmail) return { success: false, error: 'Email already exists' };
       const existUsername = await this.userRepository.findOne({
         where: { username },
       });
       if (existUsername)
         return { success: false, error: 'User name already exists' };
-      const existEmail = await this.userRepository.findOne({
-        where: { email },
-      });
-      if (existEmail) return { success: false, error: 'Email already exists' };
       await this.userRepository.save(
         this.userRepository.create({ username, email, password }),
       );
@@ -61,16 +61,20 @@ export class UserService {
     }
   }
 
-  async findById(userId: number): Promise<FindByIdOutput> {
-    return await this.userRepository.findById(userId);
+  async findById(findByIdInput: FindByIdInput): Promise<FindByIdOutput> {
+    try {
+      return await this.userRepository.findById(findByIdInput);
+    } catch {
+      return InternalServerErrorOutput;
+    }
   }
 
   async editAccount(
-    user: User,
+    user: number,
     { username, email, password }: EditAccountInput,
   ): Promise<EditAccountOutput> {
     try {
-      const userData = await this.userRepository.findOneBy({ id: user.id });
+      const userData = await this.userRepository.findOneBy({ id: user });
 
       if (email) {
         const existEmail = await this.userRepository.findOneBy({ email });
@@ -85,23 +89,37 @@ export class UserService {
           return { success: false, error: 'Username already exists' };
         userData.username = username;
       }
-      if (password) user.password = password;
+      if (password) userData.password = password;
 
       await this.userRepository.save(userData);
       return { success: true };
     } catch (e) {
       console.log(e);
-      return { success: false, error: 'Could not edit account' };
+      return InternalServerErrorOutput;
     }
   }
 
-  async deleteAccount(user: User): Promise<DeleteAccountOutput> {
+  async deleteAccount(user: number): Promise<DeleteAccountOutput> {
     try {
-      await this.userRepository.delete({ id: user.id });
+      await this.userRepository.delete({ id: user });
       return { success: true };
     } catch (e) {
       console.log(e);
-      return { success: false, error: 'Could not delete account' };
+      return InternalServerErrorOutput;
+    }
+  }
+
+  async changeRole(
+    userId: number,
+    { role }: ChangeRoleInput,
+  ): Promise<ChangeRoleOutput> {
+    try {
+      const user = await this.userRepository.findOne({ where: { id: userId } });
+      if (role) user.role = role;
+      await this.userRepository.save(user);
+      return { success: true };
+    } catch {
+      return InternalServerErrorOutput;
     }
   }
 }

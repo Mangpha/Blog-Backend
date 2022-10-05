@@ -11,15 +11,16 @@ import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
 import { Post } from './post/entities/post.entity';
 import { Category } from './post/entities/category.entity';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'dev' ? '.dev.env' : '.test.env',
-      ignoreEnvFile: process.env.NODE_ENV === 'prod',
+      ignoreEnvFile: process.env.NODE_ENV === 'production',
       validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid('dev', 'test', 'prod').required(),
+        NODE_ENV: Joi.string().valid('dev', 'test', 'production').required(),
         SERVER_PORT: Joi.string().required(),
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.string().required(),
@@ -27,6 +28,9 @@ import { Category } from './post/entities/category.entity';
         DB_PSWD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
         PRIVATE_KEY: Joi.string().required(),
+        AWS_ACCESS_KEY: Joi.string().required(),
+        AWS_SECRET_KEY: Joi.string().required(),
+        BUCKET: Joi.string().required(),
       }),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -44,9 +48,10 @@ import { Category } from './post/entities/category.entity';
       password: process.env.DB_PSWD,
       database: process.env.DB_NAME,
       entities: [User, Post, Category],
-      synchronize: process.env.NODE_ENV !== 'prod',
+      synchronize: process.env.NODE_ENV !== 'production',
       logging:
-        process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'test',
+        process.env.NODE_ENV !== 'production' &&
+        process.env.NODE_ENV !== 'test',
     }),
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
@@ -54,6 +59,7 @@ import { Category } from './post/entities/category.entity';
     UserModule,
     AuthModule,
     PostModule,
+    UploadsModule,
   ],
   controllers: [],
   providers: [],

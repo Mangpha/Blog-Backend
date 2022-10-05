@@ -1,12 +1,14 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Roles } from 'src/auth/roles.decorator';
 import { UserData } from 'src/auth/userData.decorator';
+import { ChangeRoleInput, ChangeRoleOutput } from './dtos/changeRole.dto';
 import {
   CreateAccountInput,
   CreateAccountOutput,
 } from './dtos/createAccount.dto';
 import { DeleteAccountOutput } from './dtos/deleteAccount.dto';
 import { EditAccountInput, EditAccountOutput } from './dtos/editAccount.dto';
+import { FindByIdInput, FindByIdOutput } from './dtos/findById.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
@@ -15,11 +17,6 @@ import { UserService } from './user.service';
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Query((returns) => Boolean)
-  hello(): boolean {
-    return false;
-  }
-
   @Mutation((returns) => CreateAccountOutput)
   createAccount(
     @Args('input') createAccountInput: CreateAccountInput,
@@ -27,7 +24,7 @@ export class UserResolver {
     return this.userService.createAccount(createAccountInput);
   }
 
-  @Query((returns) => LoginOutput)
+  @Mutation((returns) => LoginOutput)
   login(@Args('input') loginInput: LoginInput): Promise<LoginOutput> {
     return this.userService.login(loginInput);
   }
@@ -44,12 +41,28 @@ export class UserResolver {
     @UserData() user: User,
     @Args('input') editAccountInput: EditAccountInput,
   ): Promise<EditAccountOutput> {
-    return this.userService.editAccount(user, editAccountInput);
+    return this.userService.editAccount(user.id, editAccountInput);
   }
 
   @Roles('Any')
   @Mutation((returns) => DeleteAccountOutput)
   deleteAccount(@UserData() user: User): Promise<DeleteAccountOutput> {
-    return this.userService.deleteAccount(user);
+    return this.userService.deleteAccount(user.id);
+  }
+
+  @Query((returns) => FindByIdOutput)
+  findUserById(
+    @Args('input') findByIdInput: FindByIdInput,
+  ): Promise<FindByIdOutput> {
+    return this.userService.findById(findByIdInput);
+  }
+
+  @Roles('Any')
+  @Mutation((returns) => ChangeRoleOutput)
+  changeRole(
+    @UserData() user: User,
+    @Args('input') changeRoleInput: ChangeRoleInput,
+  ): Promise<ChangeRoleOutput> {
+    return this.userService.changeRole(user.id, changeRoleInput);
   }
 }
