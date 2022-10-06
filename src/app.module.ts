@@ -12,6 +12,7 @@ import { PostModule } from './post/post.module';
 import { Post } from './post/entities/post.entity';
 import { Category } from './post/entities/category.entity';
 import { UploadsModule } from './uploads/uploads.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -52,7 +53,7 @@ import { UploadsModule } from './uploads/uploads.module';
       password: process.env.DB_PSWD,
       database: process.env.DB_NAME,
       entities: [User, Post, Category],
-      synchronize: true,
+      synchronize: process.env.NODE_ENV !== 'production',
       logging:
         process.env.NODE_ENV !== 'production' &&
         process.env.NODE_ENV !== 'test',
@@ -65,7 +66,7 @@ import { UploadsModule } from './uploads/uploads.module';
     PostModule,
     UploadsModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}
