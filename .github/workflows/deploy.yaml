@@ -86,7 +86,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Generate deployment package
-        run: zip -r blog-server.zip . -x '*.git*' './src/*' './aws/*' './node_modules/*' awscliv2.zip
+        run: zip -r blog-server_v1.zip . -x '*.git*' './src/*' './aws/*' './node_modules/*' awscliv2.zip
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v16
@@ -97,5 +97,5 @@ jobs:
           environment_name: ${{ secrets.DEPLOY_ENV_NAME }}
           region: ${{ secrets.AWS_REGION }}
           version_label: ${{ github.SHA }}
-          deployment_package: blog-server.zip
+          deployment_package: blog-server_v1.zip
           use_existing_version_if_available: true

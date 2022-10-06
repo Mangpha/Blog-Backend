@@ -21,7 +21,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "deploy": "npm install && npm run start:prod"
+    "deploy": "mkdir node_modules && npm ci && npm run start:prod"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.0.19",
