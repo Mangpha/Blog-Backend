@@ -6,8 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "engines": {
-    "node": "16.15.0",
-    "npm": "8.14.0"
+    "node": "v16.15.0"
   },
   "scripts": {
     "prebuild": "rimraf dist",
@@ -70,7 +69,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "4.0.0",
-    "typescript": "^4.3.5"
+    "typescript": "^4.8.4"
   },
   "jest": {
     "moduleFileExtensions": [
