@@ -7,7 +7,7 @@ import {
 import { IsBoolean, IsEmail, IsEnum, IsString, Length } from 'class-validator';
 import { CommonEntity } from 'src/common/entity/common.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { InternalServerErrorException } from '@nestjs/common';
 import { Post } from 'src/post/entities/post.entity';
 
