@@ -1,12 +1,12 @@
 {
   "name": "backend",
-  "version": "0.0.1",
+  "version": "1.0",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "engines": {
-    "node": "v16.15.0"
+    "node": "16.15.0"
   },
   "scripts": {
     "prebuild": "rimraf dist",
