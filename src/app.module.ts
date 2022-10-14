@@ -44,6 +44,7 @@ import { AppController } from './app.controller';
       context: ({ req }) => {
         return { token: req.headers['token'] };
       },
+      cache: 'bounded',
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
