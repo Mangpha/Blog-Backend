@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as Joi from 'joi';
+import Joi from 'joi';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
 import { JwtModule } from './jwt/jwt.module';
@@ -53,7 +53,7 @@ import { AppController } from './app.controller';
       password: process.env.DB_PSWD,
       database: process.env.DB_NAME,
       entities: [User, Post, Category],
-      synchronize: process.env.NODE_ENV !== 'production',
+      synchronize: true,
       logging:
         process.env.NODE_ENV !== 'production' &&
         process.env.NODE_ENV !== 'test',
